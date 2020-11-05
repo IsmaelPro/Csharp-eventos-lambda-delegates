@@ -41,11 +41,16 @@ namespace ByteBank.Agencias
 
         private void AtualizarControles()
         {
-            btnOK.Click += new RoutedEventHandler(btnOk_Click);
-            btnCancelar.Click += new RoutedEventHandler(btnCancelar_Click);
+            var okEventHandler = (RoutedEventHandler)btnOk_Click + Fechar; // está acontecendo a mesma coisa que no método abaixo
+            var cancelarEventHandler =
+                (RoutedEventHandler)Delegate.Combine(  //uma forma de combinar dois métodos usando método combine
+                    (RoutedEventHandler)btnCancelar_Click, 
+                    (RoutedEventHandler)Fechar);
 
-            btnOK.Click += new RoutedEventHandler(Fechar);
-            btnCancelar.Click += new RoutedEventHandler(Fechar);
+
+            btnOK.Click += okEventHandler;
+            btnCancelar.Click += cancelarEventHandler;
+
 
         }
 
