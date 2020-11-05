@@ -36,6 +36,7 @@ namespace ByteBank.Agencias
             _agencia = agencia ?? throw new ArgumentNullException(nameof(agencia));
             AtualizarCamposDeTexto();
             AtualizarControles();
+
         }
 
         private void AtualizarCamposDeTexto()
@@ -64,72 +65,27 @@ namespace ByteBank.Agencias
             btnOK.Click += okEventHandler;
             btnCancelar.Click += cancelarEventHandler;
 
-            txtNumero.TextChanged += ValidarCampoNulo;
-            txtNumero.TextChanged += ValidarSomenteDigito;
+            txtNumero.Validacao += ValidarCampoNulo;
+            txtNumero.Validacao += ValidarSomenteDigito;
 
-            txtNome.TextChanged += ValidarCampoNulo;
-            txtDescricao.TextChanged += ValidarCampoNulo;
-            txtEndereco.TextChanged += ValidarCampoNulo;          
-            txtTelefone.TextChanged += ValidarCampoNulo;
+            txtNome.Validacao += ValidarCampoNulo;
+            txtDescricao.Validacao += ValidarCampoNulo;
+            txtEndereco.Validacao += ValidarCampoNulo;
+            txtTelefone.Validacao += ValidarCampoNulo;
 
 
         }
 
-        private void ValidarSomenteDigito(object sender, EventArgs e)
-
-        /*
-         * O normal seria usar como segundo parametro o tipo TextChangedEventArgs
-         * mas considerando a contra-invariância(lembra do que é?)
-         * como TextChangedEventArgs herda de EventArgs podemos usar dessa forma
-        */
+        private bool ValidarSomenteDigito(string texto)
         {
-            var txt = sender as TextBox;
-
-            var todosCaracteresSaoDigitos = txt.Text.All(char.IsDigit); // simplificação
-
-            txt.Background = todosCaracteresSaoDigitos
-               ? new SolidColorBrush(Colors.White)
-               : new SolidColorBrush(Colors.OrangeRed);
+            return texto.All(char.IsDigit);
         }
 
-        /*
-* O sender, ou o 'o' se não estivermos seguindo a regra do dotnet
-* é o objeto que que gera o evento
-* ao invés de criar um método que gera delegates podemos usar
-* repetidamente o evento em si
-* nesse caso usando o sender e dando um cast, pois ele é um objeto
-* e precisamos de um delegate.
-* Assim transformamos o objeto do evento em um delegate e o reutilizamos quantas vezes quisermos
-* 
-*/
 
-        private void ValidarCampoNulo(object sender, EventArgs e)
+        private bool ValidarCampoNulo(string texto)
         {
-            var txt = sender as TextBox;
-            var textoEstaVazio = String.IsNullOrEmpty(txt.Text);
-            txt.Background = textoEstaVazio
-               ? new SolidColorBrush(Colors.OrangeRed)
-               : new SolidColorBrush(Colors.White);
+            return  !String.IsNullOrEmpty(texto);
         }
-
-        //private TextChangedEventHandler ConstruirDelegateValidacaoCampoNulo(TextBox txt) //criando um método que cria delegates
-        //{
-        //    return (o, e) =>
-        //    /*um detalhe que não escrevi é que a partír do C# 3  nesse caso de delegates não precisamos
-        //     * escrever os parâmetros completos com os tipos, pois o próprio c# infere o que eles são
-        //     * não escrever object o, objecteventhandler e => apenas 'o' e 'e', facilitando a escrita
-        //    */
-
-        //    {
-        //        var textoEstaVazio = String.IsNullOrEmpty(txt.Text);
-        //         txt.Background = textoEstaVazio 
-        //        ? new SolidColorBrush(Colors.OrangeRed) 
-        //        : new SolidColorBrush(Colors.White);
-        //    };
-        //}
-
-
-
 
         private void Fechar(object sender, EventArgs e) =>
             Close();
