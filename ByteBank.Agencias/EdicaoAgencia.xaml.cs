@@ -83,13 +83,10 @@ namespace ByteBank.Agencias
          * como TextChangedEventArgs herda de EventArgs podemos usar dessa forma
         */
         {
-            Func<char, bool> VerificaSeEhDigito = caractere =>
-            {
-                return char.IsDigit(caractere);
-            };
-
             var txt = sender as TextBox;
-            var todosCaracteresSaoDigitos = txt.Text.All(VerificaSeEhDigito);
+
+            var todosCaracteresSaoDigitos = txt.Text.All(char.IsDigit); // simplificação
+
             txt.Background = todosCaracteresSaoDigitos
                ? new SolidColorBrush(Colors.White)
                : new SolidColorBrush(Colors.OrangeRed);
