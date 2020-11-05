@@ -64,24 +64,47 @@ namespace ByteBank.Agencias
             btnOK.Click += okEventHandler;
             btnCancelar.Click += cancelarEventHandler;
 
+            txtNumero.TextChanged += ValidarCampoNulo;
+            txtNumero.TextChanged += ValidarSomenteDigito;
+
             txtNome.TextChanged += ValidarCampoNulo;
             txtDescricao.TextChanged += ValidarCampoNulo;
-            txtEndereco.TextChanged += ValidarCampoNulo;
-            txtNumero.TextChanged += ValidarCampoNulo;
+            txtEndereco.TextChanged += ValidarCampoNulo;          
             txtTelefone.TextChanged += ValidarCampoNulo;
 
 
         }
+
+        private void ValidarSomenteDigito(object sender, EventArgs e)
+
         /*
-         * O sender, ou o 'o' se não estivermos seguindo a regra do dotnet
-         * é o objeto que que gera o evento
-         * ao invés de criar um método que gera delegates podemos usar
-         * repetidamente o evento em si
-         * nesse caso usando o sender e dando um cast, pois ele é um objeto
-         * e precisamos de um delegate.
-         * Assim transformamos o objeto do evento em um delegate e o reutilizamos quantas vezes quisermos
-         * 
+         * O normal seria usar como segundo parametro o tipo TextChangedEventArgs
+         * mas considerando a contra-invariância(lembra do que é?)
+         * como TextChangedEventArgs herda de EventArgs podemos usar dessa forma
         */
+        {
+            Func<char, bool> VerificaSeEhDigito = caractere =>
+            {
+                return char.IsDigit(caractere);
+            };
+
+            var txt = sender as TextBox;
+            var todosCaracteresSaoDigitos = txt.Text.All(VerificaSeEhDigito);
+            txt.Background = todosCaracteresSaoDigitos
+               ? new SolidColorBrush(Colors.White)
+               : new SolidColorBrush(Colors.OrangeRed);
+        }
+
+        /*
+* O sender, ou o 'o' se não estivermos seguindo a regra do dotnet
+* é o objeto que que gera o evento
+* ao invés de criar um método que gera delegates podemos usar
+* repetidamente o evento em si
+* nesse caso usando o sender e dando um cast, pois ele é um objeto
+* e precisamos de um delegate.
+* Assim transformamos o objeto do evento em um delegate e o reutilizamos quantas vezes quisermos
+* 
+*/
 
         private void ValidarCampoNulo(object sender, EventArgs e)
         {
