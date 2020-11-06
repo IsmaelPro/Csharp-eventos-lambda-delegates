@@ -18,17 +18,10 @@ namespace ByteBank.Agencias
     /// <summary>
     /// Interaction logic for EdicaoAgencia.xaml
     /// </summary>
-    /// 
-
-
-    //Delegates, são apontadores para funções, ou seja, 
-    //são funções que nos permitem invocar outras. Eventos, 
-    //utilizam os delegates para fazer a ponte entre as mensagens da aplicação e as nossas funções.
-
-
     public partial class EdicaoAgencia : Window
     {
         private readonly Agencia _agencia;
+
         public EdicaoAgencia(Agencia agencia)
         {
             InitializeComponent();
@@ -36,7 +29,6 @@ namespace ByteBank.Agencias
             _agencia = agencia ?? throw new ArgumentNullException(nameof(agencia));
             AtualizarCamposDeTexto();
             AtualizarControles();
-
         }
 
         private void AtualizarCamposDeTexto()
@@ -50,19 +42,13 @@ namespace ByteBank.Agencias
 
         private void AtualizarControles()
         {
-            RoutedEventHandler dialogResultTrue = (o, e) => DialogResult = true; // criando métodos anônimos para criar delegates
+            RoutedEventHandler dialogResultTrue = (o, e) => DialogResult = true;
+            RoutedEventHandler dialogResultFalse = (o, e) => DialogResult = false;
 
-            RoutedEventHandler dialogResultFalse = (o, e) => DialogResult = false; //usando expressões lambda em um método anônimo
+            var okEventHandler = dialogResultTrue + Fechar;
+            var cancelarEventHandler = dialogResultFalse + Fechar;
 
-
-            var okEventHandler = dialogResultTrue + Fechar; // está acontecendo a mesma coisa que no método abaixo
-            var cancelarEventHandler =
-                (RoutedEventHandler)Delegate.Combine(  //uma forma de combinar dois métodos usando método combine
-                    dialogResultFalse,
-                    (RoutedEventHandler)Fechar);
-
-
-            btnOK.Click += okEventHandler;
+            btnOk.Click += okEventHandler;
             btnCancelar.Click += cancelarEventHandler;
 
             txtNumero.Validacao += ValidarCampoNulo;
@@ -72,24 +58,21 @@ namespace ByteBank.Agencias
             txtDescricao.Validacao += ValidarCampoNulo;
             txtEndereco.Validacao += ValidarCampoNulo;
             txtTelefone.Validacao += ValidarCampoNulo;
-
-
+        }
+        
+        private void ValidarSomenteDigito(object sender, ValidacaoEventArgs e)
+        {
+            var ehValido = e.Texto.All(Char.IsDigit);
+            e.EhValido = ehValido;
         }
 
-        private bool ValidarSomenteDigito(string texto)
+        private void ValidarCampoNulo(object sender, ValidacaoEventArgs e)
         {
-            return texto.All(char.IsDigit);
-        }
-
-
-        private bool ValidarCampoNulo(string texto)
-        {
-            return  !String.IsNullOrEmpty(texto);
+            var ehValido = !String.IsNullOrEmpty(e.Texto);
+            e.EhValido = ehValido;
         }
 
         private void Fechar(object sender, EventArgs e) =>
             Close();
-
-
     }
 }

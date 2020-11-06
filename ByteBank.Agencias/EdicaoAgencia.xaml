@@ -6,8 +6,8 @@
         xmlns:local="clr-namespace:ByteBank.Agencias"
         mc:Ignorable="d"
         Title="EdicaoAgencia" Height="300" Width="300">
-    <Canvas Margin="0,0,505,0">
-        <StackPanel Canvas.Top="15" Canvas.Left="15 " Width="270">
+    <Canvas>
+        <StackPanel Canvas.Top="15" Canvas.Left="15" Width="270">
             <TextBlock FontWeight="Bold">Número</TextBlock>
             <local:ValidacaoTextBox x:Name="txtNumero"></local:ValidacaoTextBox>
             <TextBlock FontWeight="Bold">Nome</TextBlock>
@@ -18,10 +18,17 @@
             <local:ValidacaoTextBox x:Name="txtDescricao"></local:ValidacaoTextBox>
             <TextBlock FontWeight="Bold">Endereço</TextBlock>
             <local:ValidacaoTextBox x:Name="txtEndereco"></local:ValidacaoTextBox>
-            
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,5">
-                <Button Content="OK" Margin="15,0" Padding="5" Name="btnOK"/>
-                <Button Content="Cancelar" Padding="5" Name="btnCancelar"/>
+
+            <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Right"
+                        Margin="0,5">
+                <Button Content="Ok"
+                        Margin="15,0"
+                        Padding="5"
+                        Name="btnOk"/>
+                <Button Content="Cancelar"
+                        Padding="5"
+                        Name="btnCancelar"/>
             </StackPanel>
             
         </StackPanel>
